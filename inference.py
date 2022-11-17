@@ -260,7 +260,7 @@ class InferenceModule:
         """
         raise NotImplementedError
 
-
+from busters import GameState
 class ExactInference(InferenceModule):
     """
     The exact dynamic inference module should use forward algorithm updates to
@@ -276,7 +276,7 @@ class ExactInference(InferenceModule):
             self.beliefs[p] = 1.0
         self.beliefs.normalize()
 
-    def observeUpdate(self, observation, gameState):
+    def observeUpdate(self, observation:float, gameState:GameState):
         """
         Update beliefs based on the distance observation and Pacman's position.
 
@@ -292,9 +292,13 @@ class ExactInference(InferenceModule):
         position is known.
         """
         "*** YOUR CODE HERE ***"
-        raiseNotDefined()
-
+        toUpdate=[]
+        for pos in self.allPositions:
+            toUpdate.append([pos,self.beliefs[pos]*self.getObservationProb(observation,gameState.getPacmanPosition(),pos,self.getJailPosition())])
+        for item in toUpdate:
+            self.beliefs[item[0]]=item[1]
         self.beliefs.normalize()
+        return
 
     def elapseTime(self, gameState):
         """
