@@ -144,3 +144,22 @@ class GreedyBustersAgent(BustersAgent):
             [beliefs for i, beliefs in enumerate(self.ghostBeliefs)
              if livingGhosts[i+1]]
         "*** YOUR CODE HERE ***"
+        #First find the closest ghost
+        GhostLocs=[]
+        for ghostDis in livingGhostPositionDistributions:
+            ghostLocMap=[]
+            for pos,val in ghostDis.items():
+                ghostLocMap.append([pos,val])
+            ghostLocMap.sort(key=lambda x:x[1],reverse=True)
+            GhostLocs.append(ghostLocMap[0][0])
+        GhostDis=[]
+        for ghostloc in GhostLocs:
+            GhostDis.append([ghostloc,self.distancer.getDistance(ghostloc, pacmanPosition)])
+        GhostDis.sort(key=lambda x: x[1])
+        ClosestGhostLoc=GhostDis[0][0]
+        #玩家做每个action之后距离最近的Ghost
+        ActionResult=[]
+        for action in legal:
+            ActionResult.append([action,self.distancer.getDistance(ClosestGhostLoc,Actions.getSuccessor(pacmanPosition, action))])
+        ActionResult.sort(key=lambda x:x[1])
+        return ActionResult[0][0]
